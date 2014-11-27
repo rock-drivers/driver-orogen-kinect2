@@ -1,0 +1,22 @@
+name "kinect2"
+
+import_types_from "base"
+using_library "base-types"
+using_library "freenect2"
+using_library "glu"
+
+version "0.1"
+
+
+task_context "Task" do
+    needs_configuration
+    output_port("color_frame", ro_ptr("/base/samples/frame/Frame")).
+        doc("video image retrieved from Camera")
+    
+    output_port("ir_frame", ro_ptr("/base/samples/frame/Frame")).
+        doc("video image retrieved from Camera")
+
+    output_port("depth_frame", ro_ptr("/base/samples/DistanceImage")).
+        doc("depth image retrieved from Camera")
+end
+
