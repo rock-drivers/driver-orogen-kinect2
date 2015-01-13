@@ -104,6 +104,7 @@ bool Task::onNewFrame(Frame::Type type, Frame *frame){
             if(!color_frame){
                 color_frame = new base::samples::frame::Frame(width,height,8,base::samples::frame::MODE_RGB);
             }
+            color_frame->time = base::Time::now();
             color_frame->setImage(data,width*height*bpp);
             color_frame_p.reset(color_frame);
             _color_frame.write(color_frame_p);
@@ -118,6 +119,7 @@ bool Task::onNewFrame(Frame::Type type, Frame *frame){
                 ir_frame = new base::samples::frame::Frame(width,height,32,base::samples::frame::MODE_GRAYSCALE);
             }
             ir_frame->setImage(data,width*height*bpp);
+            ir_frame->time = base::Time::now();
             ir_frame_p.reset(ir_frame);
             _ir_frame.write(ir_frame_p);
         }else{
@@ -130,8 +132,11 @@ bool Task::onNewFrame(Frame::Type type, Frame *frame){
             if(!depth_frame){
                 depth_frame = new base::samples::DistanceImage(width,height); 
                 depth_frame->data.resize(width*height);
+                Freenect2Device::IrCameraParams p = device->getIrCameraParams();
+                depth_frame->setIntrinsic(p.fx,p.fy,p.cx,p.cy);
             }
-            uint32_t *depth_data = (uint32_t*)data;
+            depth_frame->time = base::Time::now();
+            float *depth_data = (float*)data;
             for(size_t i = 0; i< depth_frame->data.size();i++){
                 depth_frame->data[i] = depth_data[i]/1000.0; //to meters
             }
