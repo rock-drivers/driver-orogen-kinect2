@@ -17,7 +17,8 @@ def find_name(basename)
     end
 end
 
-Orocos::run "kinect2::Task" => "task", "image_preprocessing::DepthImage2Pointcloud" => "converter", :output => '%m-%p.log' do
+#Orocos::run "kinect2::Task" => "task", "image_preprocessing::DepthImage2Pointcloud" => "converter", :output => '%m-%p.log' do
+Orocos::run "kinect2::Task" => "task", "image_preprocessing::DepthImage2Pointcloud" => "converter", :output => '/dev/null' do
     task = Orocos::TaskContext.get "task"
     converter = Orocos::TaskContext.get "converter"
     task.color_frame.connect_to converter.color_frame, :type => :buffer, :size => 50
