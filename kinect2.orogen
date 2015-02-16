@@ -4,6 +4,8 @@ import_types_from "base"
 using_library "base-types"
 using_library "freenect2"
 using_library "glu"
+using_task_library "image_preprocessing"
+using_task_library "ply"
 
 version "0.1"
 
@@ -20,3 +22,8 @@ task_context "Task" do
         doc("depth image retrieved from Camera")
 end
 
+deployment 'kinect2_test' do
+    task("kinect","Task")
+    task("converter","image_preprocessing::DepthImage2Pointcloud")
+    task("ply","ply::Task")
+end
