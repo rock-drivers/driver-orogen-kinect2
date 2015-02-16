@@ -14,8 +14,11 @@ Orocos::run "kinect2_test", :output => '/dev/null' do
     task = Orocos::TaskContext.get "kinect"
     converter = Orocos::TaskContext.get "converter"
     ply = Orocos::TaskContext.get "ply"
-    task.color_frame.connect_to converter.color_frame, :type => :buffer, :size => 50
-    task.depth_frame.connect_to converter.frame, :type => :buffer, :size => 50
+    task.color_frame.connect_to converter.color_frame, :type => :buffer, :size => 2 
+    task.depth_frame.connect_to converter.frame, :type => :buffer, :size => 2
+
+    Orocos.log_port task.color_frame
+    Orocos.log_port task.depth_frame
 
     Orocos.transformer.manager.conf.static_transform(
         Eigen::Vector3.new(0, 0, 0),
@@ -37,7 +40,7 @@ Orocos::run "kinect2_test", :output => '/dev/null' do
             end
         end
     end
-
+    ply.saveContinious = false
     ply.configure
     ply.start
 
@@ -55,7 +58,7 @@ Orocos::run "kinect2_test", :output => '/dev/null' do
     task.start
     converter.configure
     converter.start
-    converter.pointcloud.connect_to ply.input, :type => :buffer, :size => 50
+    converter.pointcloud.connect_to ply.input, :type => :buffer, :size => 2
 #    Vizkit.display task
 #    Vizkit.display converter 
     Vizkit.display converter.pointcloud, :widget => Vizkit.default_loader.PointcloudVisualization

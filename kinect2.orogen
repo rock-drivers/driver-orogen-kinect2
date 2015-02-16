@@ -26,4 +26,5 @@ deployment 'kinect2_test' do
     task("kinect","Task")
     task("converter","image_preprocessing::DepthImage2Pointcloud")
     task("ply","ply::Task")
+    add_default_logger.periodic(0.5)
 end
