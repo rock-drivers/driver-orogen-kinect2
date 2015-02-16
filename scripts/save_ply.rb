@@ -7,7 +7,7 @@ Orocos.initialize
 widget = Vizkit.load "save.ui"
 widget.show
 
-threads = [] 
+thread = nil
 
 
 Orocos::run "kinect2_test", :output => '/dev/null' do
@@ -27,17 +27,27 @@ Orocos::run "kinect2_test", :output => '/dev/null' do
         "input" => "pc"
     )
     Orocos.transformer.setup(converter)
+    should_run = false
     widget.save.connect SIGNAL(:clicked) do
-        threads << Thread.new(widget,ply) do |widget,ply|
-            begin
-                widget.save.setEnabled(false)
-                widget.filename.setText("... in progess ...")
-                filename = ply.saveTrigger()
-                widget.filename.setText(filename)
-                widget.save.setEnabled(true)
-            rescue Exception => e
-                STDERR.puts e
+        if !thread
+            should_run = true
+            thread = Thread.new(widget,ply) do |widget,ply|
+                begin
+                    widget.save.setText("Stop")
+                    widget.filename.setText("... in progess ...")
+                    while should_run do
+                        filename = ply.saveTrigger()
+                        widget.filename.setText(filename)
+                        sleep 1
+                    end
+                    thread = nil
+                    widget.save.setText("Start")
+                rescue Exception => e
+                    STDERR.puts e
+                end
             end
+        else
+            should_run = false
         end
     end
     ply.saveContinious = false
