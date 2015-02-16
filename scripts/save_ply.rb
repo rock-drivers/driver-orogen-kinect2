@@ -50,35 +50,14 @@ Orocos::run "kinect2_test", :output => '/dev/null' do
 #            sleep 1
 #        end
 #    end
+
     task.configure
     task.start
     converter.configure
     converter.start
     converter.pointcloud.connect_to ply.input, :type => :buffer, :size => 50
-#    converter.pointcloud.connect_to do |pc|
-#        f = File.new(find_name("output"),File::CREAT|File::TRUNC|File::RDWR, 0644)
-#	    f.puts "ply"
-#            f.puts "format ascii 1.0"
-#            f.puts "element vertex #{pc.points.size}" 
-#            f.puts "property float x"
-#            f.puts "property float y"
-#            f.puts "property float z"
-#            f.puts "property float red"
-#            f.puts "property float green"
-#            f.puts "property float blue"
-#            f.puts "end_header"
-#
-#            pc.points.each_with_index do |p,i|
-#                if pc.colors.size > 0
-#		    f.puts "#{p[0]} #{p[1]} #{p[2]} #{pc.colors[i].data[0]} #{pc.colors[i].data[1]} #{pc.colors[i].data[2]}"
-#                else
-#		    f.puts "#{p[0]} #{p[1]} #{p[2]} 1 1 1"
-#                end
-#            end
-#            f.close
-#        pc
-#    end
 #    Vizkit.display task
 #    Vizkit.display converter 
+    Vizkit.display converter.pointcloud, :widget => Vizkit.default_loader.PointcloudVisualization
     Vizkit.exec
 end
