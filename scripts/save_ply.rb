@@ -4,17 +4,18 @@ require 'transformer/runtime'
 
 Orocos.initialize
 
-widget = Vizkit.load "save.ui"
+widget = Vizkit.load File.join(File.dirname(__FILE__) ,"save.ui")
 widget.show
 
 thread = nil
 
 
-Orocos::run "kinect2_test", :output => '/dev/null' do
+#Orocos::run "kinect2_test", :output => '/dev/null' do
+Orocos::run "kinect2_test"  do
     task = Orocos::TaskContext.get "kinect"
     converter = Orocos::TaskContext.get "converter"
     ply = Orocos::TaskContext.get "ply"
-    task.color_frame.connect_to converter.color_frame, :type => :buffer, :size => 2 
+#    task.color_frame.connect_to converter.color_frame, :type => :buffer, :size => 2 
     task.depth_frame.connect_to converter.frame, :type => :buffer, :size => 2
 
     Orocos.log_port task.color_frame
@@ -69,8 +70,8 @@ Orocos::run "kinect2_test", :output => '/dev/null' do
     converter.configure
     converter.start
     converter.pointcloud.connect_to ply.input, :type => :buffer, :size => 2
-#    Vizkit.display task
-#    Vizkit.display converter 
+    Vizkit.display task
+    Vizkit.display converter 
     Vizkit.display converter.pointcloud, :widget => Vizkit.default_loader.PointcloudVisualization
     Vizkit.exec
 end

@@ -10,9 +10,10 @@ Orocos::run "kinect2::Task" => "task", "image_preprocessing::DepthImage2Pointclo
     task.depth_frame.connect_to converter.frame, :type => :buffer, :size => 50
     task.configure
     task.start
-    converter.configure
-    converter.start
+#    converter.configure
+#    converter.start
     Vizkit.display task
-    Vizkit.display converter 
+    Vizkit.display task.color_frame
+#    Vizkit.display converter 
     Vizkit.exec
 end

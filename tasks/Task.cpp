@@ -104,8 +104,17 @@ bool Task::onNewFrame(Frame::Type type, Frame *frame){
             if(!color_frame){
                 color_frame = new base::samples::frame::Frame(width,height,8,base::samples::frame::MODE_RGB);
             }
+
             color_frame->time = base::Time::now();
-            color_frame->setImage(data,width*height*bpp);
+            char data_new[width*height*bpp];
+            for(size_t x=0;x<width;x++){
+                for(size_t y=0;y<height;y++){
+                    data_new[0 + x*bpp + y*bpp*width] =  data[2 + (width-x)*bpp + y*bpp*width];
+                    data_new[1 + x*bpp + y*bpp*width] =  data[1 + (width-x)*bpp + y*bpp*width];
+                    data_new[2 + x*bpp + y*bpp*width] =  data[0 + (width-x)*bpp + y*bpp*width];
+                }
+            }
+            color_frame->setImage(data_new,width*height*bpp);
             color_frame_p.reset(color_frame);
             _color_frame.write(color_frame_p);
         }else{
@@ -117,6 +126,15 @@ bool Task::onNewFrame(Frame::Type type, Frame *frame){
         if(bpp == 4){
             if(!ir_frame){
                 ir_frame = new base::samples::frame::Frame(width,height,32,base::samples::frame::MODE_GRAYSCALE);
+            }
+            char data_new[width*height*bpp];
+            for(size_t x=0;x<width;x++){
+                for(size_t y=0;y<height;y++){
+                    data_new[0 + x*bpp + y*bpp*width] =  data[0 + (width-x)*bpp + y*bpp*width];
+                    data_new[1 + x*bpp + y*bpp*width] =  data[1 + (width-x)*bpp + y*bpp*width];
+                    data_new[2 + x*bpp + y*bpp*width] =  data[2 + (width-x)*bpp + y*bpp*width];
+                    data_new[3 + x*bpp + y*bpp*width] =  data[3 + (width-x)*bpp + y*bpp*width];
+                }
             }
             ir_frame->setImage(data,width*height*bpp);
             ir_frame->time = base::Time::now();
@@ -137,8 +155,11 @@ bool Task::onNewFrame(Frame::Type type, Frame *frame){
             }
             depth_frame->time = base::Time::now();
             float *depth_data = (float*)data;
-            for(size_t i = 0; i< depth_frame->data.size();i++){
-                depth_frame->data[i] = depth_data[i]/1000.0; //to meters
+
+            for(size_t x=0;x<width;x++){
+                for(size_t y=0;y<height;y++){
+                    depth_frame->data[x+y*width] = depth_data[(width-x)+y*width]/1000.0; //to meters
+                }
             }
 
             depth_frame_p.reset(depth_frame);
