@@ -5,7 +5,6 @@ using_library "base-types"
 using_library "freenect2"
 using_library "glu"
 using_task_library "image_preprocessing"
-using_task_library "ply"
 
 version "0.1"
 
@@ -25,6 +24,5 @@ end
 deployment 'kinect2_test' do
     task("kinect","Task")
     task("converter","image_preprocessing::DepthImage2Pointcloud")
-    task("ply","ply::Task")
     add_default_logger.periodic(0.5)
 end

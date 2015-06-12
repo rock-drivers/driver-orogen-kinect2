@@ -7,6 +7,5 @@
   <depend package="base/cmake" />
   <depend package="drivers/freenect2" />
   <depend package="image_processing/orogen/image_preprocessing" />
-  <depend package="recognition/orogen/ply" />
   <depend package="drivers/orogen/transformer" />
 </package>
