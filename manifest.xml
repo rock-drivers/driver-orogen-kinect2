@@ -1,0 +1,14 @@
+<package>
+  <description brief="Driver for the Kinect V2 (aka K4W / Kinect for Windows)">
+    Unfourtnalty the underlaying drivers needs a GL context.
+    So this Library can only run on machines that have a X server active
+  </description>
+  <author>Matthias Goldhoorn/matthias.goldhoorn@uni-bremen.de</author>
+  <license></license>
+  <url>http://</url>
+  <logo>http://</logo>
+  <depend package="base/cmake" />
+  <depend package="drivers/freenect2" />
+  <depend package="image_processing/orogen/image_preprocessing" />
+  <depend package="drivers/orogen/transformer" />
+</package>
