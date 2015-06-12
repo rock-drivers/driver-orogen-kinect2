@@ -4,6 +4,7 @@ import_types_from "base"
 using_library "base-types"
 using_library "freenect2"
 using_library "glu"
+using_library "glfw3"
 using_task_library "image_preprocessing"
 
 version "0.1"

@@ -2,9 +2,8 @@
 
 #include "Task.hpp"
 #include <base/Logging.hpp>
-#include <libfreenect2/opengl.h>
 #include <GL/freeglut.h>
-//#include <libfreenect2/opengl.h>
+#include <GLFW/glfw3.h>
 
 using namespace kinect2;
 using namespace libfreenect2;

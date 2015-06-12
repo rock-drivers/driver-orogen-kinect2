@@ -1,5 +1,8 @@
 <package>
-  <description brief="Driver for the Kinect V2 (aka K4W / Kinect for Windows)"/>
+  <description brief="Driver for the Kinect V2 (aka K4W / Kinect for Windows)">
+    Unfourtnalty the underlaying drivers needs a GL context.
+    So this Library can only run on machines that have a X server active
+  </description>
   <author>Matthias Goldhoorn/matthias.goldhoorn@uni-bremen.de</author>
   <license></license>
   <url>http://</url>
