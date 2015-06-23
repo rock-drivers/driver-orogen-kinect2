@@ -99,21 +99,24 @@ bool Task::onNewFrame(Frame::Type type, Frame *frame){
     unsigned char* data = frame->data;
 
     if(type == Frame::Color){
-        if(bpp == 3){
+        //The kinect guy desicded to use BGRX (with alpha channel and alpha always zero so we handle alpha as non-existend in the following)
+        if(bpp == 4 || bpp == 3){
+            size_t bpp_internal = 3;
+
             if(!color_frame){
                 color_frame = new base::samples::frame::Frame(width,height,8,base::samples::frame::MODE_RGB);
             }
 
             color_frame->time = base::Time::now();
-            char data_new[width*height*bpp];
+            char data_new[width*height*bpp_internal];
             for(size_t x=0;x<width;x++){
                 for(size_t y=0;y<height;y++){
-                    data_new[0 + x*bpp + y*bpp*width] =  data[2 + (width-x)*bpp + y*bpp*width];
-                    data_new[1 + x*bpp + y*bpp*width] =  data[1 + (width-x)*bpp + y*bpp*width];
-                    data_new[2 + x*bpp + y*bpp*width] =  data[0 + (width-x)*bpp + y*bpp*width];
+                    data_new[0 + x*bpp_internal + y*bpp_internal*width] =  data[2 + (width-x)*bpp + y*bpp*width];
+                    data_new[1 + x*bpp_internal + y*bpp_internal*width] =  data[1 + (width-x)*bpp + y*bpp*width];
+                    data_new[2 + x*bpp_internal + y*bpp_internal*width] =  data[0 + (width-x)*bpp + y*bpp*width];
                 }
             }
-            color_frame->setImage(data_new,width*height*bpp);
+            color_frame->setImage(data_new,width*height*bpp_internal);
             color_frame_p.reset(color_frame);
             _color_frame.write(color_frame_p);
         }else{
