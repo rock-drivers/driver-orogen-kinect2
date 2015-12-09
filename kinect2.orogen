@@ -10,12 +10,15 @@ version "0.1"
 
 task_context "Task" do
     needs_configuration
+    output_port("color_frame_orginal", ro_ptr("/base/samples/frame/Frame")).
+        doc("video image retrieved from Camera it his orginal resolution")
+    
     output_port("color_frame", ro_ptr("/base/samples/frame/Frame")).
-        doc("video image retrieved from Camera")
+        doc("video image retrieved from Camera unsidtorted and aligned to the depth-frame")
     
     output_port("ir_frame", ro_ptr("/base/samples/frame/Frame")).
         doc("video image retrieved from Camera")
 
     output_port("depth_frame", ro_ptr("/base/samples/DistanceImage")).
-        doc("depth image retrieved from Camera")
+        doc("depth image retrieved from Camera it is already undistorted to match the color frame")
 end
